@@ -29,21 +29,20 @@ The frontend proxy uses `FINACCESS_API_URL`, defaulting to `http://127.0.0.1:800
 ..\.tools\node-v24.19.0-win-x64\npm.cmd test
 ```
 
-The production dependency audit, standalone build, and Render-style proxy smoke test are run with:
+The production dependency audit and Vercel-compatible Next.js build are run with:
 
 ```powershell
 ..\.tools\node-v24.19.0-win-x64\npm.cmd audit --omit=dev
 ..\.tools\node-v24.19.0-win-x64\npm.cmd run build
-..\.venv\Scripts\python.exe .\scripts\validate_render_server.py --node ..\.tools\node-v24.19.0-win-x64\node.exe
+..\.tools\node-v24.19.0-win-x64\npm.cmd test
 ```
 
-## Render deployment
+## Vercel deployment
 
-`render.yaml` defines a Frankfurt Node web service. The build produces vinext's standalone Node server, and `FINACCESS_API_URL` routes the same-origin assessment proxy to the separately hosted FastAPI service.
+The standard Next.js application is deployed to Vercel's free Hobby plan. Its same-origin assessment route proxies requests to the separately hosted Render FastAPI service. `maxDuration = 60` allows the proxy to wait for a sleeping free API instance to wake.
 
-The Render build and start commands are:
+Set this optional Vercel environment variable if the API address changes:
 
 ```text
-npm ci && npm run build
-npm start
+FINACCESS_API_URL=https://finaccess-eswatini-api.onrender.com
 ```

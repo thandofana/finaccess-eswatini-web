@@ -225,6 +225,7 @@ button:focus-visible, a:focus-visible, select:focus-visible { outline: 3px solid
 .form-field--disabled { opacity: 0.58; }
 .form-actions { display: flex; justify-content: space-between; padding: 1.1rem clamp(1.5rem, 4vw, 3.5rem); border-top: 1px solid var(--border); background: var(--page); }
 .form-error { margin: 0; padding: 1rem clamp(1.5rem, 4vw, 3.5rem); border-top: 1px solid #e8b7a6; background: #fff0ea; color: #985239; font-size: 0.8rem; }
+.form-wake { margin: 0; padding: 1rem clamp(1.5rem, 4vw, 3.5rem); border-top: 1px solid #bbd1f2; background: #edf5ff; color: #315b92; font-size: 0.8rem; }
 .assessment-results__intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; }
 .assessment-results__intro .eyebrow { color: var(--accent-one); }
 .assessment-results__intro h2 { margin: 0.4rem 0 0; font: 600 clamp(2.2rem, 4vw, 4rem)/1 var(--heading-font); letter-spacing: -0.04em; }

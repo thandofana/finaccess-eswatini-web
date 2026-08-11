@@ -6,11 +6,11 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "vinext dev",
-    "build": "vinext build",
-    "start": "node dist/standalone/server.js",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
-    "lint": "eslint app tests next.config.ts vite.config.ts"
+    "lint": "eslint app tests next.config.ts"
   },
   "dependencies": {
     "next": "16.3.0",
@@ -22,15 +22,10 @@
     "@types/node": "22.19.19",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "@vitejs/plugin-react": "6.0.2",
-    "@vitejs/plugin-rsc": "0.5.26",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.0",
-    "react-server-dom-webpack": "19.2.8",
     "tailwindcss": "4.2.1",
-    "typescript": "5.9.3",
-    "vinext": "1.0.0-beta.5",
-    "vite": "8.2.1"
+    "typescript": "5.9.3"
   },
   "type": "module"
 }

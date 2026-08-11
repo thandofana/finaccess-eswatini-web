@@ -1,21 +1,39 @@
 import assert from "node:assert/strict";
-import test from "node:test";
+import { spawn } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import test, { after, before } from "node:test";
+
+const port = 4313;
+const baseUrl = `http://127.0.0.1:${port}`;
+const projectRoot = fileURLToPath(new URL("..", import.meta.url));
+const nextCli = fileURLToPath(new URL("../node_modules/next/dist/bin/next", import.meta.url));
+let server;
+
+before(async () => {
+  server = spawn(process.execPath, [nextCli, "start", "-p", String(port), "-H", "127.0.0.1"], {
+    cwd: projectRoot,
+    env: { ...process.env, FINACCESS_API_URL: "https://finaccess-eswatini-api.onrender.com" },
+    stdio: "ignore",
+  });
+  const deadline = Date.now() + 30_000;
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(baseUrl);
+      if (response.ok) return;
+    } catch {
+      // The production server is still starting.
+    }
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  }
+  throw new Error("Next.js production server did not become ready.");
+});
+
+after(() => {
+  server?.kill();
+});
 
 async function render(path = "/") {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}-${path}`);
-  const { default: server } = await import(workerUrl.href);
-  const request = new Request(`http://localhost${path}`, {
-    headers: { accept: "text/html" },
-  });
-  if (typeof server === "function") {
-    return server(request, {});
-  }
-  return server.fetch(
-    request,
-    { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
-    { waitUntil() {}, passThroughOnException() {} },
-  );
+  return fetch(`${baseUrl}${path}`, { headers: { accept: "text/html" } });
 }
 
 test("renders Signal as the selected homepage", async () => {

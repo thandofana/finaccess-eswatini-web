@@ -121,6 +121,7 @@ export function Assessment() {
   const [values, setValues] = useState<AssessmentValues>(assessmentDefaults);
   const [step, setStep] = useState(0);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [isWakingService, setIsWakingService] = useState(false);
   const [result, setResult] = useState<ApiResponse | null>(null);
   const [error, setError] = useState("");
 
@@ -161,7 +162,8 @@ export function Assessment() {
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    setStatus("loading"); setError(""); setResult(null);
+    setStatus("loading"); setIsWakingService(false); setError(""); setResult(null);
+    const wakeTimer = window.setTimeout(() => setIsWakingService(true), 6000);
     try {
       const response = await fetch("/api/assessment", {
         method: "POST",
@@ -174,6 +176,9 @@ export function Assessment() {
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The assessment could not be completed.");
       setStatus("error");
+    } finally {
+      window.clearTimeout(wakeTimer);
+      setIsWakingService(false);
     }
   }
 
@@ -209,12 +214,17 @@ export function Assessment() {
         </div>
       </div>
       {status === "error" && <p className="form-error" role="alert">{error} Check that the Phase 10 API is running and try again.</p>}
+      {status === "loading" && isWakingService && (
+        <p className="form-wake" role="status">
+          The free prediction service is waking up. The first assessment after inactivity can take about one minute.
+        </p>
+      )}
       <div className="form-actions">
         <button className="button button--quiet" type="button" disabled={step === 0} onClick={() => setStep((current) => Math.max(0, current - 1))}>Back</button>
         {step < groups.length - 1 ? (
           <button className="button button--primary" type="button" onClick={() => setStep((current) => Math.min(groups.length - 1, current + 1))}>Continue</button>
         ) : (
-          <button className="button button--primary" type="submit" disabled={status === "loading"}>{status === "loading" ? "Running both models…" : "Generate assessment"}</button>
+          <button className="button button--primary" type="submit" disabled={status === "loading"}>{status === "loading" ? (isWakingService ? "Waking prediction service…" : "Running both models…") : "Generate assessment"}</button>
         )}
       </div>
     </form>

@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const apiBaseUrl = process.env.FINACCESS_API_URL ?? "http://127.0.0.1:8000";
+const apiBaseUrl =
+  process.env.FINACCESS_API_URL ??
+  (process.env.VERCEL
+    ? "https://finaccess-eswatini-api.onrender.com"
+    : "http://127.0.0.1:8000");
+
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   try {
