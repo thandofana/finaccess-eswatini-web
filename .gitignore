@@ -35,6 +35,15 @@ yarn-error.log*
 # vercel
 **/.vercel/
 
+# retired local deployment prototypes
+/.openai/
+/build/
+/db/
+/drizzle/
+/examples/
+/scripts/
+/worker/
+
 # typescript
 next-env.d.ts
 **/dist/
@@ -47,3 +56,5 @@ next-env.d.ts
 **/.pytest_cache/
 **/.venv/
 *.py[cod]
+
+.vercel

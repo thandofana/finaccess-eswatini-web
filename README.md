@@ -2,6 +2,8 @@
 
 This repository deploys the selected **Signal** interface and both validated machine-learning pipelines as one public Vercel application. Recruiters use one URL, no account or sign-in is required, and browser requests stay on the same domain.
 
+**Live application:** [finaccess-eswatini.vercel.app](https://finaccess-eswatini.vercel.app)
+
 ## Deployment architecture
 
 ```text
