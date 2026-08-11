@@ -12,7 +12,7 @@ let server;
 before(async () => {
   server = spawn(process.execPath, [nextCli, "start", "-p", String(port), "-H", "127.0.0.1"], {
     cwd: projectRoot,
-    env: { ...process.env, FINACCESS_API_URL: "https://finaccess-eswatini-api.onrender.com" },
+    env: process.env,
     stdio: "ignore",
   });
   const deadline = Date.now() + 30_000;

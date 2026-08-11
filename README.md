@@ -1,48 +1,56 @@
 # FinAccess Eswatini Web Application
 
-The selected Signal interface is the production homepage. The repository also retains the two alternative Phase 11 design routes for portfolio comparison:
+This repository deploys the selected **Signal** interface and both validated machine-learning pipelines as one public Vercel application. Recruiters use one URL, no account or sign-in is required, and browser requests stay on the same domain.
 
-1. **The Ledger** — editorial evidence
-2. **Open Field** — human-centred insight
-3. **Signal** — modern fintech clarity
+## Deployment architecture
 
-The root route opens Signal directly. Each direction includes Overview, Financial Inclusion, Mobile Money, Financial Access Assessment, and Methodology areas.
+```text
+Vercel project
+├── web/       Next.js 16 frontend
+└── backend/   FastAPI inference service + validated model artifacts
 
-## Easiest review
-
-Double-click `OPEN_DESIGN_REVIEW.cmd` in the main project folder. It opens a self-contained offline gallery with all three concepts and requires no API, server, or command window.
-
-## Local development
-
-Start the Phase 10 API from the repository root, then start the frontend from this directory:
-
-```powershell
-..\.tools\node-v24.19.0-win-x64\npm.cmd run dev
+/api/*  → FastAPI service
+/*      → Next.js service
 ```
 
-The frontend proxy uses `FINACCESS_API_URL`, defaulting to `http://127.0.0.1:8000`. Copy `.env.example` to `.env.local` only when a different local API address is required.
+The service split is declared in `vercel.json` using Vercel Services. It replaces the earlier cross-host Render proxy and therefore needs no public API environment variable or CORS configuration.
 
-## Validation
+## Product routes
+
+- `/` — selected Signal experience
+- `/concepts/ledger` — retained Phase 11 comparison direction
+- `/concepts/open-field` — retained Phase 11 comparison direction
+- `/concepts/signal` — retained Signal comparison route
+- `/api/health` — model and explainer integrity status
+- `/api/docs` — interactive FastAPI contract
+- `/api/v1/assessment` — combined assessment endpoint
+
+## Local validation
+
+From this repository root:
 
 ```powershell
-..\.tools\node-v24.19.0-win-x64\npm.cmd run lint
-..\.tools\node-v24.19.0-win-x64\npm.cmd test
+..\.tools\node-v24.19.0-win-x64\npm.cmd --prefix web run lint
+..\.tools\node-v24.19.0-win-x64\npm.cmd --prefix web run build
+..\.venv\Scripts\python.exe -m unittest discover -s backend\tests -v
 ```
 
-The production dependency audit and Vercel-compatible Next.js build are run with:
+Run the two services independently during development:
 
 ```powershell
-..\.tools\node-v24.19.0-win-x64\npm.cmd audit --omit=dev
-..\.tools\node-v24.19.0-win-x64\npm.cmd run build
-..\.tools\node-v24.19.0-win-x64\npm.cmd test
+..\.venv\Scripts\uvicorn.exe backend.main:app --host 127.0.0.1 --port 8000
+..\.tools\node-v24.19.0-win-x64\npm.cmd --prefix web run dev
 ```
+
+For Vercel-equivalent routing, install the Vercel CLI and run `vercel dev -L` at the repository root.
 
 ## Vercel deployment
 
-The standard Next.js application is deployed to Vercel's free Hobby plan. Its same-origin assessment route proxies requests to the separately hosted Render FastAPI service. `maxDuration = 60` allows the proxy to wait for a sleeping free API instance to wake.
+1. Import `thandofana/finaccess-eswatini-web` in Vercel.
+2. Select **Services** as the project framework.
+3. Keep the repository root as the project root.
+4. Deploy on the Hobby plan.
 
-Set this optional Vercel environment variable if the API address changes:
+No application environment variables are required. The frontend posts directly to the same-origin FastAPI route.
 
-```text
-FINACCESS_API_URL=https://finaccess-eswatini-api.onrender.com
-```
+Vercel Services and the Python runtime are currently beta features. The application therefore keeps artifact integrity checks, health reporting, and a validated fallback deployment until the public Vercel assessment flow has passed.

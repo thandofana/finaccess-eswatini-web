@@ -165,7 +165,7 @@ export function Assessment() {
     setStatus("loading"); setIsWakingService(false); setError(""); setResult(null);
     const wakeTimer = window.setTimeout(() => setIsWakingService(true), 6000);
     try {
-      const response = await fetch("/api/assessment", {
+      const response = await fetch("/api/v1/assessment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -213,10 +213,10 @@ export function Assessment() {
           {groups[step].fields.map((field) => <SelectField key={field.key} field={field} value={values[field.key]} disabled={disabledFields.has(field.key)} onChange={updateValue} />)}
         </div>
       </div>
-      {status === "error" && <p className="form-error" role="alert">{error} Check that the Phase 10 API is running and try again.</p>}
+      {status === "error" && <p className="form-error" role="alert">{error} Please try again.</p>}
       {status === "loading" && isWakingService && (
         <p className="form-wake" role="status">
-          The free prediction service is waking up. The first assessment after inactivity can take about one minute.
+          Preparing both prediction models. The first assessment may take a few extra seconds.
         </p>
       )}
       <div className="form-actions">
@@ -224,7 +224,7 @@ export function Assessment() {
         {step < groups.length - 1 ? (
           <button className="button button--primary" type="button" onClick={() => setStep((current) => Math.min(groups.length - 1, current + 1))}>Continue</button>
         ) : (
-          <button className="button button--primary" type="submit" disabled={status === "loading"}>{status === "loading" ? (isWakingService ? "Waking prediction service…" : "Running both models…") : "Generate assessment"}</button>
+          <button className="button button--primary" type="submit" disabled={status === "loading"}>{status === "loading" ? "Running both models…" : "Generate assessment"}</button>
         )}
       </div>
     </form>
