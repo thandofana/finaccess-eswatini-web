@@ -1,58 +1,97 @@
-# FinAccess Eswatini Web Application
+# FinAccess Eswatini Web
 
-This repository deploys the selected **Signal** interface and both validated machine-learning pipelines as one public Vercel application. Recruiters use one URL, no account or sign-in is required, and browser requests stay on the same domain.
+The deployable FinAccess Eswatini product: a responsive Next.js interface and a FastAPI inference service containing two validated model pipelines and their model-matched SHAP explainers.
 
-**Live application:** [finaccess-eswatini.vercel.app](https://finaccess-eswatini.vercel.app)
+[Open the live application](https://finaccess-eswatini.vercel.app) | [Interactive API documentation](https://finaccess-eswatini.vercel.app/api/docs)
+
+![FinAccess Eswatini overview](docs/screenshots/overview.png)
+
+## Product experience
+
+The selected **Signal** direction presents five connected areas:
+
+- Overview of weighted access estimates and analytical patterns
+- Financial-inclusion evidence and Model 1 insights
+- Mobile-money evidence and Model 2 insights
+- One Financial Access Assessment that returns both predictions
+- Methodology, leakage controls, evaluation, and explainability
+
+The result hierarchy leads with a clear answer, followed by a supporting probability and five signed factors generated from the relevant SHAP explainer.
+
+![Two-model assessment result](docs/screenshots/assessment-results.png)
 
 ## Deployment architecture
 
 ```text
 Vercel project
-├── web/       Next.js 16 frontend
-└── backend/   FastAPI inference service + validated model artifacts
+|-- web/       Next.js 16 frontend
+`-- backend/   FastAPI service and validated model artifacts
 
-/api/*  → FastAPI service
-/*      → Next.js service
+/api/*  -> FastAPI service
+/*      -> Next.js service
 ```
 
-The service split is declared in `vercel.json` using Vercel Services. It replaces the earlier cross-host Render proxy and therefore needs no public API environment variable or CORS configuration.
+The split is declared in `vercel.json` using Vercel Services. Browser requests stay on one HTTPS origin, so the assessment needs no public backend URL or normal-path CORS configuration.
 
-## Product routes
+## Public routes
 
-- `/` — selected Signal experience
-- `/concepts/ledger` — retained Phase 11 comparison direction
-- `/concepts/open-field` — retained Phase 11 comparison direction
-- `/concepts/signal` — retained Signal comparison route
-- `/api/health` — model and explainer integrity status
-- `/api/docs` — interactive FastAPI contract
-- `/api/v1/assessment` — combined assessment endpoint
+| Route | Purpose |
+|---|---|
+| `/` | Selected Signal product experience |
+| `/concepts/ledger` | Archived Phase 11 editorial direction |
+| `/concepts/open-field` | Archived Phase 11 public-interest direction |
+| `/concepts/signal` | Signal comparison route |
+| `/api/health` | Model, explainer, and artifact-integrity status |
+| `/api/docs` | Interactive FastAPI contract |
+| `/api/v1/assessment` | Combined two-model assessment endpoint |
 
-## Local validation
+## Repository layout
 
-From this repository root:
+```text
+web/                    Next.js application, visualizations, and rendered-route tests
+backend/                FastAPI schemas, service layer, API tests, and model artifacts
+docs/screenshots/       Fresh screenshots captured from the live public application
+vercel.json             Multi-service build and routing contract
+.vercelignore           Minimal deployment package allowlist/exclusions
+```
+
+## Local development
+
+From the parent project directory:
+
+```powershell
+.\.venv\Scripts\uvicorn.exe frontend.backend.main:app --host 127.0.0.1 --port 8000
+.\.tools\node-v24.19.0-win-x64\npm.cmd --prefix frontend\web run dev
+```
+
+For a Vercel-equivalent local route map, install the Vercel CLI and run `vercel dev -L` from this repository root.
+
+## Validation
 
 ```powershell
 ..\.tools\node-v24.19.0-win-x64\npm.cmd --prefix web run lint
 ..\.tools\node-v24.19.0-win-x64\npm.cmd --prefix web run build
+..\.tools\node-v24.19.0-win-x64\npm.cmd --prefix web test
 ..\.venv\Scripts\python.exe -m unittest discover -s backend\tests -v
 ```
 
-Run the two services independently during development:
+Production validation additionally checks public unauthenticated access, prediction equivalence with the Phase 10 reference response, invalid-input rejection, same-origin routing, all six model/explainer artifacts, microdata exclusion, and secret-file safety.
 
-```powershell
-..\.venv\Scripts\uvicorn.exe backend.main:app --host 127.0.0.1 --port 8000
-..\.tools\node-v24.19.0-win-x64\npm.cmd --prefix web run dev
-```
+## Deployment
 
-For Vercel-equivalent routing, install the Vercel CLI and run `vercel dev -L` at the repository root.
-
-## Vercel deployment
-
-1. Import `thandofana/finaccess-eswatini-web` in Vercel.
+1. Import `thandofana/finaccess-eswatini-web` into Vercel.
 2. Select **Services** as the project framework.
-3. Keep the repository root as the project root.
+3. Keep this repository root as the project root.
 4. Deploy on the Hobby plan.
 
-No application environment variables are required. The frontend posts directly to the same-origin FastAPI route.
+No application environment variables are required. The validated release can also be published with the authenticated Vercel CLI. Automatic Git deployments require the Vercel GitHub App to have access to this repository.
 
-Vercel Services and the Python runtime are currently beta features. The application therefore keeps artifact integrity checks, health reporting, and a validated fallback deployment until the public Vercel assessment flow has passed.
+## Scope and limitations
+
+- Submitted profiles are not persisted by the application.
+- Raw and processed respondent microdata are not included in this repository.
+- Artifact hashes are verified before the API reports healthy.
+- Vercel Services and its Python runtime should be regression-tested as platform features evolve.
+- The application is a portfolio proof of concept, not a production financial decision or eligibility system.
+
+Developed by **Thando F. Dlamini**.
