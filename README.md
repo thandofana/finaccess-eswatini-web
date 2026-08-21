@@ -4,7 +4,9 @@ The deployable FinAccess Eswatini product: a responsive Next.js interface and a 
 
 [Open the live application](https://finaccess-eswatini.vercel.app) | [Interactive API documentation](https://finaccess-eswatini.vercel.app/api/docs)
 
-<img src="docs/screenshots/overview.png" alt="FinAccess Eswatini overview" width="100%">
+<p align="center">
+  <img src="docs/screenshots/overview.png" alt="FinAccess Eswatini overview" width="80%">
+</p>
 
 ## Product experience
 
@@ -18,7 +20,9 @@ The selected **Signal** direction presents five connected areas:
 
 The result hierarchy leads with a clear answer, followed by a supporting probability and five signed factors generated from the relevant SHAP explainer.
 
-<img src="docs/screenshots/assessment-results.png" alt="Two-model assessment result" width="100%">
+<p align="center">
+  <img src="docs/screenshots/assessment-results.png" alt="Two-model assessment result" width="80%">
+</p>
 
 ## Deployment architecture
 
