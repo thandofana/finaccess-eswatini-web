@@ -4,7 +4,7 @@ import { concepts } from "./data";
 
 export const metadata: Metadata = {
   title: "Financial Access in Eswatini",
-  description: "Explore financial inclusion, mobile money adoption, and explainable model assessments for Eswatini.",
+  description: "Financial-access evidence, model research, and explainable assessment for Eswatini.",
 };
 
 export default function HomePage() {
