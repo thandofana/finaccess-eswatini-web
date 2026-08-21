@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
+import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
+
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -10,19 +23,19 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase,
     title: { default: "FinAccess Eswatini", template: "%s · FinAccess Eswatini" },
-    description: "An explainable machine-learning platform for financial inclusion and mobile-money adoption in Eswatini.",
+    description: "Financial-access evidence, model research, and explainable assessment for Eswatini.",
     applicationName: "FinAccess Eswatini",
     keywords: ["financial inclusion", "mobile money", "Eswatini", "machine learning", "explainable AI"],
     openGraph: {
       title: "FinAccess Eswatini",
       description: "Evidence. Prediction. Explanation.",
       type: "website",
-      images: [{ url: "/og.png", width: 1731, height: 909, alt: "FinAccess Eswatini — Evidence. Prediction. Explanation." }],
+      images: [{ url: "/og.png", width: 1734, height: 907, alt: "FinAccess Eswatini — Evidence. Prediction. Explanation." }],
     },
     twitter: { card: "summary_large_image", title: "FinAccess Eswatini", description: "Evidence. Prediction. Explanation.", images: ["/og.png"] },
   };
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body className={`${sourceSans.variable} ${sourceSerif.variable}`}>{children}</body></html>;
 }

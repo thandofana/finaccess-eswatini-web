@@ -1,10 +1,20 @@
 type BarDatum = { label: string; inclusion: number; mobile: number };
 type SignalDatum = { label: string; value: number };
 
+export function Statistic({ value, label, note }: { value: string; label: string; note?: string }) {
+  return (
+    <div className="statistic">
+      <strong>{value}</strong>
+      <span>{label}</span>
+      {note && <small>{note}</small>}
+    </div>
+  );
+}
+
 export function GroupedBars({ data, compact = false }: { data: BarDatum[]; compact?: boolean }) {
   return (
-    <div className={`grouped-bars ${compact ? "grouped-bars--compact" : ""}`}>
-      <div className="chart-legend" aria-hidden="true">
+    <div className={`grouped-bars ${compact ? "grouped-bars--compact" : ""}`} role="img" aria-label="Comparison of financial inclusion and mobile-money account rates by group">
+      <div className="chart-legend">
         <span><i className="legend-swatch legend-swatch--one" />Financial inclusion</span>
         <span><i className="legend-swatch legend-swatch--two" />Mobile money</span>
       </div>

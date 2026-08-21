@@ -33,20 +33,26 @@ type ApiResponse = {
 
 const groups: { title: string; description: string; fields: { key: FieldKey; label: string; hint?: string }[] }[] = [
   {
-    title: "About the person",
-    description: "Basic demographic and socioeconomic characteristics.",
+    title: "Personal profile",
+    description: "Demographic, education, identity, and contextual characteristics.",
     fields: [
       { key: "female", label: "Gender" },
       { key: "age_group", label: "Age group" },
       { key: "educ", label: "Education level" },
-      { key: "inc_q", label: "Household income quintile" },
-      { key: "emp_in", label: "Workforce status" },
       { key: "fin24c", label: "Natural-disaster or severe-weather experience" },
       { key: "fin46", label: "Foundational ID ownership" },
     ],
   },
   {
-    title: "Connectivity",
+    title: "Economic profile",
+    description: "Relative household income and current workforce status.",
+    fields: [
+      { key: "inc_q", label: "Household income quintile" },
+      { key: "emp_in", label: "Workforce status" },
+    ],
+  },
+  {
+    title: "Digital access",
     description: "Recent internet use, phone access, and data-purchase behaviour.",
     fields: [
       { key: "internet_use", label: "Internet use in the past three months" },
@@ -56,8 +62,8 @@ const groups: { title: string; description: string; fields: { key: FieldKey; lab
     ],
   },
   {
-    title: "Phone use",
-    description: "Practical access, capability, privacy, and autonomy indicators.",
+    title: "Phone and SIM",
+    description: "Practical capability, privacy, registration, and autonomy indicators.",
     fields: [
       { key: "con11", label: "SIM registered in own name" },
       { key: "con12", label: "Mobile-phone use frequency" },
@@ -94,12 +100,12 @@ function ResultPanel({ result, type }: { result: ApiResult; type: "inclusion" | 
           <span className="eyebrow">{type === "inclusion" ? "Financial inclusion" : "Mobile money adoption"}</span>
           <h3>{result.answer}</h3>
         </div>
-        <div className="probability-orbit" aria-label={`Estimated likelihood ${result.probability_percent}%`}>
+        <div className="probability-orbit" aria-label={`Model-estimated likelihood ${result.probability_percent}%`}>
           <strong>{result.probability_percent.toFixed(1)}%</strong>
-          <span>estimated likelihood</span>
+          <span>model-estimated likelihood</span>
         </div>
       </div>
-      <p className="result-question">{result.question}</p>
+      <p className="result-question"><strong>Model question</strong>{result.question}</p>
       <div className="factor-heading"><span>Main factors</span><small>relative to the model baseline</small></div>
       <ol className="factor-list">
         {result.main_factors.map((factor) => (
@@ -224,7 +230,7 @@ export function Assessment() {
         {step < groups.length - 1 ? (
           <button className="button button--primary" type="button" onClick={() => setStep((current) => Math.min(groups.length - 1, current + 1))}>Continue</button>
         ) : (
-          <button className="button button--primary" type="submit" disabled={status === "loading"}>{status === "loading" ? "Running both models…" : "Generate assessment"}</button>
+          <button className="button button--primary" type="submit" disabled={status === "loading"}>{status === "loading" ? "Running both models…" : "Run model assessment"}</button>
         )}
       </div>
     </form>
